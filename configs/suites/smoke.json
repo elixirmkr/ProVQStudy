@@ -1,0 +1,51 @@
+{
+  "name": "smoke",
+  "seeds": [42],
+  "defaults": {
+    "dataset": "fake",
+    "data_root": "./data",
+    "output_dir": "./runs",
+    "train_subset": 128,
+    "test_subset": 64,
+    "batch_size": 32,
+    "num_workers": 0,
+    "epochs": 1,
+    "eval_every": 1,
+    "lr": 0.0002,
+    "beta_commit": 0.25,
+    "num_embeddings": 64,
+    "embedding_dim": 8,
+    "provq_warmup_epochs": 0,
+    "provq_transition_epochs": 0,
+    "provq_lambda": 0.1,
+    "kmeans_num_samples": 512,
+    "cov_num_samples": 512,
+    "dist_match_latent_samples": 64,
+    "dist_match_codebook_samples": 64,
+    "dist_match_sw_projections": 16,
+    "dist_match_sinkhorn_iters": 5
+  },
+  "experiments": [
+    {
+      "name": "smoke_vanilla",
+      "label": "Smoke Vanilla",
+      "group": "smoke",
+      "overrides": {
+        "quantizer": "vanilla"
+      }
+    },
+    {
+      "name": "smoke_simvq_dm",
+      "label": "Smoke SimVQ DM",
+      "group": "smoke",
+      "overrides": {
+        "quantizer": "simvq",
+        "provq_warmup_epochs": 1,
+        "epochs": 2,
+        "dist_match_enabled": true,
+        "dist_match_schedule": "anneal",
+        "dist_match_method": "sliced_wasserstein"
+      }
+    }
+  ]
+}

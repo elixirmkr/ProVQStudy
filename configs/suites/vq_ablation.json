@@ -1,0 +1,249 @@
+{
+  "name": "vq_ablation_cifar10",
+  "seeds": [42, 2026, 114514],
+  "defaults": {
+    "dataset": "cifar10",
+    "data_root": "./data",
+    "output_dir": "./runs",
+    "train_subset": 0,
+    "test_subset": 0,
+    "batch_size": 128,
+    "num_workers": 4,
+    "epochs": 100,
+    "eval_every": 1,
+    "checkpoint_every": 0,
+    "lr": 0.0002,
+    "beta_commit": 0.25,
+    "num_embeddings": 8192,
+    "embedding_dim": 32,
+    "quantizer": "vanilla",
+    "simvq_proj_init": "identity",
+    "provq_warmup_epochs": 0,
+    "provq_transition_epochs": 0,
+    "provq_lambda": 0.1,
+    "warmup_codebook_loss": false,
+    "warmup_codebook_weight": 1.0,
+    "init_method": "none",
+    "kmeans_num_samples": 100000,
+    "kmeans_batch_size": 16384,
+    "kmeans_iters": 20,
+    "kmeans_chunk_size": 1024,
+    "cov_num_samples": 200000,
+    "cov_init_eps": 0.000001,
+    "cov_init_shrinkage": 0.0,
+    "cov_init_scale": 1.0,
+    "dist_match_enabled": false,
+    "dist_match_method": "sliced_wasserstein",
+    "dist_match_schedule": "warmup_only",
+    "dist_match_latent_samples": 2048,
+    "dist_match_codebook_samples": 2048,
+    "dist_match_sinkhorn_blur": 0.2,
+    "dist_match_sinkhorn_iters": 50,
+    "dist_match_sinkhorn_tol": 0.000001,
+    "dist_match_sinkhorn_eps_relative": true,
+    "dist_match_sinkhorn_debias": true,
+    "dist_match_sw_projections": 256,
+    "dist_match_warmup_lr_mult": 5.0,
+    "dist_match_stage2_lr_mult_start": 5.0,
+    "dist_match_stage2_lr_mult_end": 0.0,
+    "dist_match_anneal_kind": "cosine"
+  },
+  "experiments": [
+    {
+      "name": "vanilla",
+      "label": "Original VQVAE",
+      "group": "core",
+      "overrides": {
+        "quantizer": "vanilla",
+        "provq_warmup_epochs": 0,
+        "init_method": "none"
+      }
+    },
+    {
+      "name": "kmeans_init",
+      "label": "K-Means Init",
+      "group": "core",
+      "overrides": {
+        "quantizer": "vanilla",
+        "provq_warmup_epochs": 0,
+        "init_method": "kmeans"
+      }
+    },
+    {
+      "name": "warmup_kmeans",
+      "label": "AE Warmup + K-Means",
+      "group": "core",
+      "overrides": {
+        "quantizer": "vanilla",
+        "provq_warmup_epochs": 50,
+        "init_method": "kmeans"
+      }
+    },
+    {
+      "name": "warmup_no_init",
+      "label": "AE Warmup without K-Means",
+      "group": "core",
+      "overrides": {
+        "quantizer": "vanilla",
+        "provq_warmup_epochs": 50,
+        "init_method": "none"
+      }
+    },
+    {
+      "name": "simvq_warmup_kmeans",
+      "label": "AE Warmup + K-Means (SimVQ)",
+      "group": "core",
+      "overrides": {
+        "quantizer": "simvq",
+        "simvq_proj_init": "identity",
+        "provq_warmup_epochs": 50,
+        "init_method": "kmeans"
+      }
+    },
+    {
+      "name": "simvq_warmup_no_kmeans",
+      "label": "AE Warmup (SimVQ)",
+      "group": "core",
+      "overrides": {
+        "quantizer": "simvq",
+        "simvq_proj_init": "identity",
+        "provq_warmup_epochs": 50,
+        "init_method": "none"
+      }
+    },
+    {
+      "name": "simvq_cdloss",
+      "label": "SimVQ Codebook Pre-adaptation",
+      "group": "core",
+      "overrides": {
+        "quantizer": "simvq",
+        "simvq_proj_init": "identity",
+        "provq_warmup_epochs": 50,
+        "warmup_codebook_loss": true,
+        "init_method": "none"
+      }
+    },
+    {
+      "name": "simvq_cov_init",
+      "label": "SimVQ Covariance Init",
+      "group": "core",
+      "overrides": {
+        "quantizer": "simvq",
+        "simvq_proj_init": "identity",
+        "provq_warmup_epochs": 50,
+        "init_method": "cov"
+      }
+    },
+    {
+      "name": "vanilla_cdloss",
+      "label": "Vanilla VQ Codebook Pre-adaptation",
+      "group": "core",
+      "overrides": {
+        "quantizer": "vanilla",
+        "provq_warmup_epochs": 50,
+        "warmup_codebook_loss": true,
+        "init_method": "none"
+      }
+    },
+    {
+      "name": "vanilla_dm_sw_warmup",
+      "label": "Vanilla VQ + SW Warmup",
+      "group": "dm",
+      "overrides": {
+        "quantizer": "vanilla",
+        "provq_warmup_epochs": 50,
+        "dist_match_enabled": true,
+        "dist_match_method": "sliced_wasserstein",
+        "dist_match_schedule": "warmup_only"
+      }
+    },
+    {
+      "name": "vanilla_dm_sinkhorn_warmup",
+      "label": "Vanilla VQ + Sinkhorn Warmup",
+      "group": "dm",
+      "overrides": {
+        "quantizer": "vanilla",
+        "provq_warmup_epochs": 50,
+        "dist_match_enabled": true,
+        "dist_match_method": "sinkhorn",
+        "dist_match_schedule": "warmup_only"
+      }
+    },
+    {
+      "name": "vanilla_dm_sw_anneal",
+      "label": "Vanilla VQ + SW Anneal",
+      "group": "dm",
+      "overrides": {
+        "quantizer": "vanilla",
+        "provq_warmup_epochs": 50,
+        "dist_match_enabled": true,
+        "dist_match_method": "sliced_wasserstein",
+        "dist_match_schedule": "anneal"
+      }
+    },
+    {
+      "name": "vanilla_dm_sinkhorn_anneal",
+      "label": "Vanilla VQ + Sinkhorn Anneal",
+      "group": "dm",
+      "overrides": {
+        "quantizer": "vanilla",
+        "provq_warmup_epochs": 50,
+        "dist_match_enabled": true,
+        "dist_match_method": "sinkhorn",
+        "dist_match_schedule": "anneal"
+      }
+    },
+    {
+      "name": "simvq_dm_sw_warmup",
+      "label": "SimVQ + SW Warmup",
+      "group": "dm",
+      "overrides": {
+        "quantizer": "simvq",
+        "simvq_proj_init": "identity",
+        "provq_warmup_epochs": 50,
+        "dist_match_enabled": true,
+        "dist_match_method": "sliced_wasserstein",
+        "dist_match_schedule": "warmup_only"
+      }
+    },
+    {
+      "name": "simvq_dm_sinkhorn_warmup",
+      "label": "SimVQ + Sinkhorn Warmup",
+      "group": "dm",
+      "overrides": {
+        "quantizer": "simvq",
+        "simvq_proj_init": "identity",
+        "provq_warmup_epochs": 50,
+        "dist_match_enabled": true,
+        "dist_match_method": "sinkhorn",
+        "dist_match_schedule": "warmup_only"
+      }
+    },
+    {
+      "name": "simvq_dm_sw_anneal",
+      "label": "SimVQ + SW Anneal",
+      "group": "dm",
+      "overrides": {
+        "quantizer": "simvq",
+        "simvq_proj_init": "identity",
+        "provq_warmup_epochs": 50,
+        "dist_match_enabled": true,
+        "dist_match_method": "sliced_wasserstein",
+        "dist_match_schedule": "anneal"
+      }
+    },
+    {
+      "name": "simvq_dm_sinkhorn_anneal",
+      "label": "SimVQ + Sinkhorn Anneal",
+      "group": "dm",
+      "overrides": {
+        "quantizer": "simvq",
+        "simvq_proj_init": "identity",
+        "provq_warmup_epochs": 50,
+        "dist_match_enabled": true,
+        "dist_match_method": "sinkhorn",
+        "dist_match_schedule": "anneal"
+      }
+    }
+  ]
+}

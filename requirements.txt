@@ -1,0 +1,7 @@
+numpy>=1.26
+torch>=2.3
+torchvision>=0.18
+scikit-image>=0.22
+scikit-learn>=1.4
+modal>=1.4
+datasets
