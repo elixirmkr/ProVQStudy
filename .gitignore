@@ -9,3 +9,4 @@ runs/
 artifacts/
 *.egg-info/
 checkpoints/
+.obsidian/

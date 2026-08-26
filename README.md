@@ -26,4 +26,5 @@ Aggregate results:
 python -m vqexp.aggregate --root runs --suite-name vq_ablation_cifar10
 ```
 
-![[研究笔记.pdf]]
+![[Pasted image 20260827023244.png]]
+![[Pasted image 20260827023322.png]]
