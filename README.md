@@ -25,3 +25,5 @@ Aggregate results:
 ```bash
 python -m vqexp.aggregate --root runs --suite-name vq_ablation_cifar10
 ```
+
+![[研究笔记.pdf]]
