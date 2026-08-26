@@ -1,6 +1,6 @@
 {
   "name": "vq_ablation_cifar10",
-  "seeds": [42, 2026, 114514],
+  "seeds": [42],
   "defaults": {
     "dataset": "cifar10",
     "data_root": "./data",
