@@ -25,6 +25,3 @@ Aggregate results:
 ```bash
 python -m vqexp.aggregate --root runs --suite-name vq_ablation_cifar10
 ```
-
-![[Pasted image 20260827023244.png]]
-![[Pasted image 20260827023322.png]]
