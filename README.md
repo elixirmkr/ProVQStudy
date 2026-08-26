@@ -1,4 +1,4 @@
-# VQ Experiment Study
+# ProVQ Study
 
 ## Main commands
 
